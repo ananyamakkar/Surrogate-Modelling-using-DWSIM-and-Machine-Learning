@@ -1,0 +1,340 @@
+RESULTS SUMMARY
+
+DWSIM Surrogate Model – Benzene–Toluene Binary Distillation
+
+1. BEST MODEL SELECTED
+
+The final surrogate model selected for the study is Polynomial Regression.
+
+The model was selected based on three criteria:
+
+* Prediction accuracy on the held-out test set
+* Stability during 5-fold cross-validation
+* Physical consistency of the predicted outputs
+
+Polynomial Regression produced the highest R² and the lowest MAE and RMSE for all four target variables when compared with Random Forest and Support Vector Regression (SVR).
+
+The underlying DWSIM process is a binary benzene–toluene distillation column using the Peng–Robinson (PR) thermodynamic model.
+
+The surrogate predicts four column performance variables:
+
+* Distillate purity (xD)
+* Bottoms purity (xB)
+* Condenser heat duty (QC)
+* Reboiler heat duty (QR)
+
+2. DATASET
+
+The machine-learning dataset was generated from 100 successful DWSIM simulation cases.
+
+Property         Value
+Dataset size     100 rows × 11 columns
+Input variables  7
+Output variables 4
+Missing values   0
+Duplicate rows   0
+
+Input Variables
+
+1. Feed Temperature
+2. Feed Pressure
+3. Feed Benzene Mole Fraction
+4. Number of Stages
+5. Feed Stage
+6. Reflux Ratio
+7. Bottoms Withdrawal Rate
+
+Output Variables
+
+1. Distillate Purity (xD)
+2. Bottoms Purity (xB)
+3. Condenser Heat Duty (QC)
+4. Reboiler Heat Duty (QR)
+
+The feed benzene mole fraction, number of stages, and feed stage were fixed at 0.50, 10, and 5, respectively.
+
+The main operating variables varied across the generated cases were feed temperature, feed pressure, reflux ratio, and bottoms withdrawal rate.
+
+3. OPERATING DOMAIN
+
+The machine-learning model was developed using the following DWSIM operating ranges:
+
+Variable                   Minimum       Maximum
+Feed Temperature           351.15 K      355.90 K
+Feed Pressure              99,000 Pa     102,000 Pa
+Feed Benzene Mole Fraction 0.50          0.50
+Number of Stages           10            10
+Feed Stage                 5             5
+Reflux Ratio               3.00          4.35
+Bottoms Withdrawal Rate    13.70 mol/s   13.97 mol/s
+
+These ranges define the operating domain represented by the DWSIM dataset. The reported surrogate performance should therefore be interpreted primarily as interpolation performance within this domain.
+
+4. MODEL TRAINING AND TESTING
+
+The 100 simulation cases were divided into:
+
+* 80 training cases
+* 20 testing cases
+
+The training cases were used to fit the models, while the 20 test cases were kept separate for evaluating predictions on unseen data.
+
+Three regression methods were evaluated:
+
+1. Polynomial Regression
+2. Random Forest
+3. Support Vector Regression (SVR)
+
+For Polynomial Regression, the numerical inputs were standardized and transformed using second-degree polynomial features before fitting a linear regression model.
+
+Random Forest used 300 decision trees with a maximum depth of 10 and a minimum leaf size of 2.
+
+SVR used an RBF kernel with standardized input features.
+
+5. FINAL TEST-SET PERFORMANCE
+
+The final test-set results for Polynomial Regression were:
+
+Output                   R²        MAE       RMSE
+Distillate Purity (xD)   0.999963   0.000032  0.000040
+Bottoms Purity (xB)      0.999968   0.000025  0.000033
+Condenser Heat Duty (QC) 1.000000   0.002960  0.003770
+Reboiler Heat Duty (QR)  1.000000   0.002776  0.003669
+
+Polynomial Regression achieved R² values above 0.9999 for all four target variables.
+
+The purity errors are very small relative to the magnitude of the predicted purities. The heat-duty errors are also small relative to the approximately 1700–2400 range of the simulated duties.
+
+The reported R² values of 1.000000 for QC and QR are rounded values; the underlying calculations give values extremely close to, but slightly below, one.
+
+6. SAMPLE PREDICTIONS VS ACTUAL DWSIM VALUES
+
+To provide a direct check of the surrogate predictions, five representative cases from the 20-case test set are shown below.
+
+The DWSIM Actual values are the reference simulation results, while the Surrogate Prediction values were obtained from the Polynomial Regression model trained on the 80 training cases.
+
+Case 1
+
+Output | DWSIM Actual | Surrogate Prediction | Absolute Error
+xD | 0.9497375926 | 0.9496769250 | 0.0000606677
+xB | 0.9616323264 | 0.9615909382 | 0.0000413882
+QC | 2307.4484814 | 2307.4528418 | 0.0043604
+QR | 2382.0883376 | 2382.0898157 | 0.0014780
+
+Operating conditions: T = 351.90 K, P = 102000 Pa, reflux ratio = 4.35, bottoms rate = 13.73 mol/s.
+
+Case 2
+
+Output | DWSIM Actual | Surrogate Prediction | Absolute Error
+xD | 0.9514272543 | 0.9513568300 | 0.0000704243
+xB | 0.9604008451 | 0.9603376242 | 0.0000632209
+QC | 2295.3310042 | 2295.3379213 | 0.0069171
+QR | 2358.5095784 | 2358.5118815 | 0.0023031
+
+Operating conditions: T = 354.40 K, P = 101000 Pa, reflux ratio = 4.35, bottoms rate = 13.73 mol/s.
+
+Case 3
+
+Output | DWSIM Actual | Surrogate Prediction | Absolute Error
+xD | 0.9366566003 | 0.9366569394 | 0.0000003390
+xB | 0.9481567387 | 0.9481584633 | 0.0000017246
+QC | 1727.3848322 | 1727.3867420 | 0.0019098
+QR | 1792.9944793 | 1792.9965775 | 0.0020981
+
+Operating conditions: T = 353.65 K, P = 101325 Pa, reflux ratio = 3.00, bottoms rate = 13.70 mol/s.
+
+Case 4
+
+Output | DWSIM Actual | Surrogate Prediction | Absolute Error
+xD | 0.9499228740 | 0.9499421543 | 0.0000192803
+xB | 0.9533528362 | 0.9533588178 | 0.0000059815
+QC | 2031.5696592 | 2031.5686200 | 0.0010392
+QR | 2103.0213320 | 2103.0203572 | 0.0009748
+
+Operating conditions: T = 352.40 K, P = 101000 Pa, reflux ratio = 3.75, bottoms rate = 13.85 mol/s.
+
+Case 5
+
+Output | DWSIM Actual | Surrogate Prediction | Absolute Error
+xD | 0.9480093020 | 0.9479849371 | 0.0000243649
+xB | 0.9459027641 | 0.9458853032 | 0.0000174610
+QC | 1829.1363923 | 1829.1348623 | 0.0015300
+QR | 1901.2648750 | 1901.2622631 | 0.0026119
+
+Operating conditions: T = 352.15 K, P = 101000 Pa, reflux ratio = 3.30, bottoms rate = 13.94 mol/s.
+
+These examples show close agreement between the rigorous DWSIM calculations and the Polynomial Regression predictions. The absolute errors remain small for both purity and energy-duty predictions.
+
+7. COMPARISON OF MACHINE-LEARNING METHODS
+
+The three regression methods were evaluated using the same input and output structure.
+
+Distillate Purity
+
+Model                 R²        MAE       RMSE
+Polynomial Regression 0.999963   0.000032  0.000040
+Random Forest         0.966626   0.000716  0.001207
+SVR                   0.884340   0.001705  0.002248
+
+Bottoms Purity
+
+Model                 R²        MAE       RMSE
+Polynomial Regression 0.999968   0.000025  0.000033
+Random Forest         0.998354   0.000196  0.000236
+SVR                   0.967375   0.000820  0.001050
+
+Condenser Heat Duty
+
+Model                 R²        MAE       RMSE
+Polynomial Regression 1.000000   0.002960  0.003770
+Random Forest         0.999117   4.925820  6.642152
+SVR                   0.929088   40.236028 59.515579
+
+Reboiler Heat Duty
+
+Model                 R²        MAE       RMSE
+Polynomial Regression 1.000000   0.002776  0.003669
+Random Forest         0.998368   6.848227  8.983348
+SVR                   0.925526   40.934649 60.686081
+
+Polynomial Regression produced the best test-set performance for all four outputs.
+
+Random Forest was the second-best model overall. It produced strong predictions, particularly for bottoms purity and the heat-duty outputs, but its errors were consistently higher than those of Polynomial Regression.
+
+SVR produced the lowest overall performance, with the largest errors occurring for the two heat-duty targets.
+
+8. 5-FOLD CROSS-VALIDATION
+
+Five-fold cross-validation was performed using shuffled folds with a fixed random state of 42.
+
+The mean R² values were:
+
+Output                   Polynomial Regression   Random Forest   SVR
+Distillate Purity (xD)   0.999716                0.995096        0.878893
+Bottoms Purity (xB)      0.999966                0.996331        0.962227
+Condenser Heat Duty (QC) 1.000000                0.998886        0.967121
+Reboiler Heat Duty (QR)  1.000000                0.997955        0.966000
+
+Polynomial Regression maintained a mean R² above 0.9997 for every target.
+
+The reported standard deviations of its cross-validation R² scores were:
+
+* xD: 0.000391
+* xB: 0.0000067
+* QC: approximately 2.0 × 10⁻¹⁰
+* QR: approximately 2.0 × 10⁻¹⁰
+
+The small variation across folds indicates that the Polynomial Regression model gives consistent results across different subsets of the available simulation data.
+
+Random Forest also showed strong cross-validation performance. SVR showed greater sensitivity to the training subset, particularly for distillate purity.
+
+9. PHYSICAL CONSISTENCY
+
+Statistical accuracy alone is not sufficient for evaluating a chemical-engineering surrogate model. The predictions were therefore checked for basic physical validity.
+
+The final Polynomial Regression predictions passed the implemented validity checks as follows:
+
+Target                   Valid Predictions
+Distillate Purity (xD)   100 / 100
+Bottoms Purity (xB)      100 / 100
+Condenser Heat Duty (QC) 100 / 100
+Reboiler Heat Duty (QR)  100 / 100
+
+The predicted ranges were also compared with the corresponding DWSIM ranges.
+
+Distillate Purity
+
+DWSIM: 0.9351597 – 0.9525357
+
+Surrogate: 0.9351609 – 0.9525676
+
+Bottoms Purity
+
+DWSIM: 0.9407915 – 0.9617605
+
+Surrogate: 0.9408035 – 0.9617350
+
+Condenser Heat Duty
+
+DWSIM: 1725.6547 – 2317.8165
+
+Surrogate: 1725.6602 – 2317.8064
+
+Reboiler Heat Duty
+
+DWSIM: 1791.6962 – 2390.5186
+
+Surrogate: 1791.7022 – 2390.5077
+
+The predicted ranges are very close to the DWSIM reference ranges. This indicates that the model reproduces the scale and general distribution of the simulated outputs without producing substantially displaced output ranges.
+
+A reflux-ratio trend check also showed the expected general increase in separation performance with increasing reflux over the investigated operating region. Small non-monotonic changes were present at some points, so the result is better interpreted as a general trend rather than a strict monotonic relationship for every individual case.
+
+10. OVERFITTING, UNDERFITTING, AND ROBUSTNESS
+
+Polynomial Regression produced extremely high test-set R² values and similarly high cross-validation R² values.
+
+The close agreement between the held-out test results and cross-validation results provides no strong evidence of conventional train-test overfitting within the available dataset.
+
+However, this result needs to be interpreted in the context of the dataset size and coverage.
+
+Only 100 simulation cases were generated, and three input variables were fixed:
+
+* Feed benzene mole fraction = 0.50
+* Number of stages = 10
+* Feed stage = 5
+
+Consequently, the model has only been tested within a relatively narrow operating space. The very high R² values demonstrate strong interpolation performance within this space, but they do not establish reliable generalization to different feed compositions, stage numbers, feed-stage locations, or substantially different operating conditions.
+
+Random Forest also performed well, although its accuracy was lower than Polynomial Regression.
+
+SVR showed comparatively lower R² values and larger prediction errors for several targets, particularly the heat-duty outputs. This suggests that the selected SVR configuration did not represent the relationships in the available dataset as effectively as the other two methods.
+
+11. IMPORTANT OBSERVATIONS
+
+The main findings from the modelling and validation process are:
+
+* Polynomial Regression was the best-performing model for all four target variables.
+* Test-set R² values exceeded 0.9999 for every target.
+* Five-fold cross-validation produced mean R² values above 0.9997 for all Polynomial Regression targets.
+* Random Forest was the second-best method overall.
+* SVR produced the largest errors among the three models for the present dataset.
+* The sample test-set predictions show close agreement between DWSIM and Polynomial Regression.
+* All 100 predictions passed the implemented physical validity checks for each target.
+* The predicted output ranges were very close to the corresponding DWSIM ranges.
+* Increasing reflux generally increased the predicted distillate and bottoms purities within the investigated operating region.
+* The model is best regarded as an interpolation surrogate for the sampled DWSIM operating domain.
+* Predictions outside the sampled ranges require additional DWSIM simulations and validation.
+
+12. FINAL CONCLUSION
+
+A machine-learning surrogate model was developed for a binary benzene–toluene distillation column simulated in DWSIM using the Peng–Robinson thermodynamic model.
+
+A dataset containing 100 successful DWSIM simulation cases was generated by varying feed temperature, feed pressure, reflux ratio, and bottoms withdrawal rate while keeping feed composition, number of stages, and feed-stage location fixed.
+
+Three regression methods were trained and compared:
+
+1. Polynomial Regression
+2. Random Forest
+3. Support Vector Regression
+
+Polynomial Regression provided the best performance for all four target variables.
+
+Its test-set performance was:
+
+* xD: R² = 0.999963
+* xB: R² = 0.999968
+* QC: R² = 1.000000
+* QR: R² = 1.000000
+
+The corresponding MAE and RMSE values were also substantially lower than those obtained with Random Forest and SVR.
+
+Five-fold cross-validation supported the model selection, with Polynomial Regression maintaining mean R² values above 0.9997 for all four outputs and very small variation between folds.
+
+Physical consistency checks showed that all 100 predictions passed the implemented validity checks, and the predicted output ranges closely matched the DWSIM reference ranges.
+
+Based on these results, Polynomial Regression was selected as the final surrogate model.
+
+The model provides a highly accurate approximation of the DWSIM simulation results within the investigated operating domain. However, its performance should not be interpreted as validation outside that domain. The fixed feed composition, stage count, and feed-stage location limit the current model's applicability.
+
+A larger future dataset incorporating additional feed compositions, stage counts, feed-stage locations, and wider but physically meaningful operating ranges would provide a stronger basis for evaluating the model's generalization to other distillation-column configurations.
