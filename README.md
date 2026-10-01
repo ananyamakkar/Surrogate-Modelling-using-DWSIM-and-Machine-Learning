@@ -124,7 +124,7 @@ The final dataset contains:
 
 * ****0 duplicate rows****
 
-**### Input Variables**
+**Input Variables**
 
 * Feed Temperature
 
@@ -140,7 +140,7 @@ The final dataset contains:
 
 * Bottoms Withdrawal Rate
 
-**### Output Variables**
+** Output Variables**
 
 * Distillate Purity (xD)
 
