@@ -140,7 +140,7 @@ The final dataset contains:
 
 * Bottoms Withdrawal Rate
 
-** Output Variables**
+**Output Variables**
 
 * Distillate Purity (xD)
 
